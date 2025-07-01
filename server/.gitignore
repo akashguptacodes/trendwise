@@ -1,0 +1,6 @@
+# .gitignore (client and server)
+node_modules
+.env
+dist
+.vscode
+.DS_Store
