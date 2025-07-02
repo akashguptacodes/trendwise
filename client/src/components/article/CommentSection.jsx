@@ -22,9 +22,11 @@ function CommentSection({ articleId }) {
     e.preventDefault();
     if (!newComment.trim()) return;
 
+    console.log(localStorage.getItem('trendwise-user'));
+    
     const comment = {
       id: comments.length + 1,
-      name: "Guest User", // Replace with logged-in user's name later
+      name: localStorage.getItem('trendwise-user'), // Replace with logged-in user's name later
       text: newComment,
       date: new Date().toISOString().split("T")[0],
     };

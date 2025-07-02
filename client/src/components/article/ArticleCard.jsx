@@ -7,6 +7,7 @@ function ArticleCard({ article }) {
       <div className="p-4">
         <h2 className="text-xl font-semibold mb-2">{article.title}</h2>
         <p className="text-gray-600 mb-4">{article.excerpt}</p>
+        {/* <p>{article.slug}</p> */}
         <Link to={`/article/${article.slug}`} className="text-blue-600 font-medium hover:underline">
           Read More →
         </Link>

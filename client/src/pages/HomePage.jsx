@@ -1,20 +1,56 @@
 import { useEffect, useState } from "react";
 import ArticleList from "../components/article/ArticleList";
 import useSearch from "../hooks/useSearch";
-import mockArticles from "../data/mockData"; // Replace this with API later
 import axios from "axios";
 
 function HomePage() {
+  const [articles, setArticles] = useState([]);
+  const [loadingArticles, setLoadingArticles] = useState(true);
+  const [trending, setTrending] = useState([]);
+
   const {
     searchQuery,
     handleSearch,
     filteredArticles,
     setSearchQuery,
-  } = useSearch(mockArticles);
+  } = useSearch(articles);
 
-  const [trending, setTrending] = useState([]);
+  const UNSPLASH_API_KEY = import.meta.env.VITE_UNSPLASH_KEY;
 
-  // Fetch trending topics
+  const fetchImage = async (query) => {
+    try {
+      const res = await fetch(
+        `https://api.unsplash.com/search/photos?query=${query}&per_page=1&client_id=${UNSPLASH_API_KEY}`
+      );
+      const data = await res.json();
+      return data?.results?.[0]?.urls?.regular || "";
+    } catch (err) {
+      console.error("Image fetch error:", err);
+      return "";
+    }
+  };
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_BACKENDURL}/api/articles`);
+        const articlesWithImages = await Promise.all(
+          res.data.map(async (article) => {
+            const imageUrl = await fetchImage(article.slug);
+            return { ...article, image: imageUrl };
+          })
+        );
+        setArticles(articlesWithImages);
+        setLoadingArticles(false);
+      } catch (err) {
+        console.error("Error fetching articles:", err);
+        setLoadingArticles(false);
+      }
+    };
+
+    fetchArticles();
+  }, []);
+
   useEffect(() => {
     const fetchTrending = async () => {
       try {
@@ -26,17 +62,17 @@ function HomePage() {
     };
 
     fetchTrending();
-    handleSearch(""); // Reset search on load
-  }, []);
+    handleSearch("");
+  }, [articles]);
 
   return (
     <div className="container mx-auto px-4 py-10">
       {/* 🧠 Hero Section */}
       <div className="text-center mb-10">
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-2">
-          TrendWise
-        </h1>
-        <p className="text-gray-600 text-lg">Stay updated with AI-generated blogs on trending topics.</p>
+        <h1 className="text-4xl font-extrabold text-gray-900 mb-2">TrendWise</h1>
+        <p className="text-gray-600 text-lg">
+          Stay updated with AI-generated blogs on trending topics.
+        </p>
       </div>
 
       {/* 🔥 Trending Topics */}
@@ -75,7 +111,11 @@ function HomePage() {
       </div>
 
       {/* 📰 Article List */}
-      <ArticleList articles={filteredArticles} />
+      {loadingArticles ? (
+        <p className="text-center text-gray-500">Loading articles...</p>
+      ) : (
+        <ArticleList articles={filteredArticles} />
+      )}
     </div>
   );
 }

@@ -74,17 +74,4 @@ Return it in the following format (JSON):
   const jsonContent = fullText.slice(jsonStart, jsonEnd + 1);
   const blog = JSON.parse(jsonContent);
   return blog;
-
-  // try {
-  //   console.log('\n📌 Title:', blog.title);
-  //   console.log('\n📖 Excerpt:', blog.excerpt);
-  //   console.log('\n📝 Content:\n', blog.content);
-  //   console.log('\n🖼️ Image:', blog.image);
-    
-  // } catch (err) {
-  //   console.error('❌ Failed to parse JSON:', err.message);
-  //   console.log('\nRaw response:\n', fullText);
-  // }
 }
-
-// generateBlog("Iran-Israel war");
