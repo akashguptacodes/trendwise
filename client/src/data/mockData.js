@@ -1,10 +1,15 @@
+import ai from '../assets/ai.jpg';
+import blockchain from '../assets/blockchain.jpg';
+
+
+
 const mockArticles = [
   {
     id: 1,
     title: "AI Revolutionizes Content Creation",
     slug: "ai-revolution-content",
     excerpt: "Discover how AI tools like ChatGPT and Gemini are reshaping the way content is created and consumed.",
-    image: "https://source.unsplash.com/random/400x250?ai",
+    image: ai,
     content: "This is the full article content about AI revolution...",
     date: "2025-06-30",
   },
@@ -13,7 +18,7 @@ const mockArticles = [
     title: "Trending Now: Web3 & Blockchain",
     slug: "web3-blockchain-trends",
     excerpt: "Web3 is no longer a buzzword – it's reshaping finance, identity, and ownership on the web.",
-    image: "https://source.unsplash.com/random/400x250?blockchain",
+    image: blockchain,
     content: "This is the full article content about Web3...",
     date: "2025-06-29",
   },
